@@ -1,0 +1,6 @@
+./RestService/target/
+./RestService/.factorypath
+./RestService/.classpath
+./RestService/.settings/
+./FrontEndClient/node_modules/
+./FrontEndClient/build/
