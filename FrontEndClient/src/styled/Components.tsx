@@ -24,10 +24,10 @@ const Input = (props: any) => {
 	return (
 		<input
 			{...props}
-			className="
+			className={`
 				bg-gray-300 appearance-none rounded 
 				w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white 
-				focus:border-purple-500 focus:shadow-md"
+				focus:border-purple-500 focus:shadow-md ${props.className}`}
 		/>
 	);
 }

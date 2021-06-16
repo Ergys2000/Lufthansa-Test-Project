@@ -3,7 +3,7 @@ package com.ergys2000.RestService.controllers;
 import java.util.Optional;
 import java.util.Random;
 
-import com.ergys2000.RestService.models.ChangePasswordRequest;
+import com.ergys2000.RestService.models.ResetPasswordRequest;
 import com.ergys2000.RestService.models.ResetToken;
 import com.ergys2000.RestService.models.User;
 import com.ergys2000.RestService.repositories.ResetTokenRepository;
@@ -69,23 +69,21 @@ public class ResetTokenController {
 			@PathVariable(name = "token") Integer token) {
 		try {
 			Optional<ResetToken> resToken = resetTokenRepository.findByEmail(email);
-			Boolean valid = false;
-			if (resToken.isPresent()) {
-				if (resToken.get().getToken().equals(token))
-					valid = true;
-			}
+			if (resToken.isEmpty())
+				throw new Exception("Sorry no user found with that email!");
+			if (!resToken.get().getToken().equals(token))
+				throw new Exception("Sorry, wrong token!");
 
-			return new ResponseWrapper<Boolean>("OK", valid, "Token verified successfully");
+			return new ResponseWrapper<Boolean>("OK", true, "Token verified successfully");
 		} catch (Exception e) {
 			return new ResponseWrapper<Boolean>("ERROR", false, e.getMessage());
 		}
 	}
 
-
 	@PutMapping(path = "/{email}/{token}")
 	@ResponseBody
 	public ResponseWrapper<Boolean> changePasswordWithToken(@PathVariable(name = "email") String email,
-			@PathVariable(name = "token") Integer token, @RequestBody ChangePasswordRequest changePasswordRequest) {
+			@PathVariable(name = "token") Integer token, @RequestBody ResetPasswordRequest resetPasswordRequest) {
 		try {
 			Optional<ResetToken> resToken = resetTokenRepository.findByEmail(email);
 			if (resToken.isEmpty())
@@ -97,7 +95,7 @@ public class ResetTokenController {
 			if (user.isEmpty())
 				throw new Exception("Sorry, no user found with that email!");
 
-			user.get().setPassword(passwordEncoder.encode(changePasswordRequest.getPassword()));
+			user.get().setPassword(passwordEncoder.encode(resetPasswordRequest.getPassword()));
 			userRepository.save(user.get());
 
 			/* Remove the token now that it has been used */

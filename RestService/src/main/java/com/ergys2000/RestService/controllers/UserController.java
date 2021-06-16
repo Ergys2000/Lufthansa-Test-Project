@@ -103,7 +103,7 @@ public class UserController {
 				if (LocalDate.now().isBefore(user.get().getStartDate().plusDays(90))) {
 					throw new Exception("Sorry you are still on probation!");
 				}
-				if(request.getStartDate().isAfter(request.getEndDate())) 
+				if (request.getStartDate().isAfter(request.getEndDate()))
 					throw new Exception("Sorry, start date cannot be after end date!");
 
 				Optional<User> supervisor = userRepository.findUserSupervisor(userId);

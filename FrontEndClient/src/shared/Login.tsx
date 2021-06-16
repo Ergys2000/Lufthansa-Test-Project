@@ -63,7 +63,7 @@ const Login = () => {
 						onChange={onChange}
 						type="password" />
 				</Label>
-				<Link to="/reset">Forgot password</Link>
+				<Link to="/reset" className="mr-auto">Forgot password?</Link>
 				<ActionButton className={"px-3 py-2 m-3"}
 					onClick={onSubmit}>
 					Log in

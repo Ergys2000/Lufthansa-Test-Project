@@ -6,7 +6,6 @@ com/ergys2000/RestService/util/ResponseWrapper.class
 com/ergys2000/RestService/configuration/SpringFoxConfig.class
 com/ergys2000/RestService/repositories/ResetTokenRepository.class
 com/ergys2000/RestService/controllers/UserController.class
-com/ergys2000/RestService/controllers/ResetTokenController.class
 com/ergys2000/RestService/exception/SkipAuthException.class
 com/ergys2000/RestService/models/AuthenticationRequest.class
 com/ergys2000/RestService/services/MyUserDetailsService.class
