@@ -41,13 +41,37 @@ public class SupervisorController {
 
 			if (user.isEmpty())
 				throw new Exception("User does not exist!");
-			if (!user.get().getType().equals("supervisor"))
-				throw new Exception("You are not a supervisor!");
 
 			return new ResponseWrapper<Optional<User>>("OK", user, "Users retrieved successfully!");
 
 		} catch (Exception e) {
 			return new ResponseWrapper<Optional<User>>("OK", null, e.getMessage());
+		}
+	}
+
+	@GetMapping(path = "/{id}/users")
+	@ResponseBody
+	public ResponseWrapper<Iterable<User>> getSupervisedUsers(@PathVariable(name = "id") Integer userId) {
+		try {
+
+			Iterable<User> users = userRepository.findBySupervisorId(userId);
+			return new ResponseWrapper<>("OK", users, "Users retrieved successfully!");
+
+		} catch (Exception e) {
+			return new ResponseWrapper<>("OK", null, e.getMessage());
+		}
+	}
+
+	@GetMapping(path = "/{id}/users/{requestsUserId}/requests")
+	@ResponseBody
+	public ResponseWrapper<Iterable<Request>> getRequestsForUser(@PathVariable(name = "requestsUserId") Integer userId) {
+		try {
+
+			Iterable<Request> requests = requestRepository.findByUserId(userId);
+			return new ResponseWrapper<>("OK", requests, "Users retrieved successfully!");
+
+		} catch (Exception e) {
+			return new ResponseWrapper<>("OK", null, e.getMessage());
 		}
 	}
 

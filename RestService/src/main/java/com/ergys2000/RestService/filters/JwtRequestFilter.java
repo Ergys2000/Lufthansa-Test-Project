@@ -110,6 +110,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			response.setStatus(HttpStatus.UNAUTHORIZED.value());
 			response.getOutputStream().print(mapper.writeValueAsString(resWrapper));
 			logger.debug("Authentication with jwt token failed");
+			e.printStackTrace();
 			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		} catch (SkipAuthException e) {
 			logger.debug("The authentication is skipping...");

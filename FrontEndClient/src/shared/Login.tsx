@@ -1,48 +1,36 @@
 import React, { useContext, useState } from 'react';
 import {
 	useHistory,
+	Link,
 } from 'react-router-dom';
 import { AuthContext } from '../App';
-import { Input, ActionButton, Form, Label } from '../styled/Components';
 import apiLink from '../API';
+import { Input, ActionButton, Form, Label } from '../styled/Components';
 
 const Login = () => {
 	const history = useHistory();
 	const authContext = useContext(AuthContext);
 
 	const [form, setForm] = useState({
-		email: "",
+		username: "",
 		password: ""
 	});
 
 	const onSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
-		const body = {
-			credentials: {
-				...form
-			}
-		}
-		await fetch(`${apiLink}/auth/signin`, {
-			method: 'post',
+		await fetch(`${apiLink}/authenticate`,{
+			method: "post",
 			headers: {
-				"Content-Type": "application/json"
+				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify(body)
-		}).then(res => res.json())
+			body: JSON.stringify(form)
+		})
+			.then(res => res.json())
 			.then(res => {
-				console.log(res);
-				if (res.status === "OK") {
-					/* Update the authContext */
-					authContext.signIn(res.result.userID, res.result.token);
-
-					/* Go to the user page */
-					history.push(`/u/${res.result.userID}`);
-
-					/* Set a timeout for when to log the user out of 1 hour */
-					setTimeout(() => {
-						alert("Your session has expired, please re-login!");
-						authContext.signOut();
-					}, 60*60*1000);
+				if(res.status === "OK") {
+					console.log(res);
+					authContext.signIn(res.result.id, res.result.jwt);
+					history.push(`/${res.result.type}/${res.result.id}`);
 				} else {
 					alert(res.message);
 				}
@@ -56,14 +44,14 @@ const Login = () => {
 	}
 
 	return (
-		<div className="bg-gray-900 m-auto w-9/12 rounded-lg px-10 pt-10 text-center min-w-max max-w-4xl shadow-lg text-gray-300">
-			<p className="text-2xl"><b>High School Management System</b></p>
+		<div className="bg-indigo-900 m-auto w-9/12 rounded-lg px-10 pt-10 text-center min-w-max max-w-4xl shadow-lg text-gray-300">
+			<p className="text-2xl"><b>Issue Tracker Login</b></p>
 			<Form>
 				<Label>
 					Email:
 					<Input
-						name="email"
-						value={form.email}
+						name="username"
+						value={form.username}
 						onChange={onChange}
 						type="text" />
 				</Label>
@@ -75,8 +63,8 @@ const Login = () => {
 						onChange={onChange}
 						type="password" />
 				</Label>
-				<ActionButton
-					className="asldkf"
+				<Link to="/reset">Forgot password</Link>
+				<ActionButton className={"px-3 py-2 m-3"}
 					onClick={onSubmit}>
 					Log in
 				</ActionButton>

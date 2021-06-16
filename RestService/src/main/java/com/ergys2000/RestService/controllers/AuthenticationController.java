@@ -46,14 +46,14 @@ public class AuthenticationController {
 		try {
 			final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
 
-			if(!passwordEncoder.matches(authRequest.getPassword(), userDetails.getPassword()))
+			if (!passwordEncoder.matches(authRequest.getPassword(), userDetails.getPassword()))
 				throw new Exception("Wrong credentials!");
 
-			System.out.println(userDetails.getPassword() + " - " + userDetails.getUsername());
 			final String jwt = jwtUtil.generateToken(userDetails);
+			final User user = userDetailsService.getUserByUsername(authRequest.getUsername());
 
-			logger.debug("Authentication successful for {}", authRequest.getUsername());
-			return new ResponseWrapper<>("OK", new AuthenticationResponse(jwt), "Token generated!");
+			return new ResponseWrapper<>("OK", new AuthenticationResponse(user.getId(), jwt, user.getType()),
+					"Token generated!");
 		} catch (Exception e) {
 			logger.debug("Authentication failed for {}", authRequest.getUsername());
 			return new ResponseWrapper<>("ERROR", null, "Wrong credentials!");

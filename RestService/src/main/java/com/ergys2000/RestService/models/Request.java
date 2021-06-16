@@ -26,17 +26,28 @@ public class Request {
 
 	@Column(name = "end_date", nullable = false)
 	private LocalDate endDate;
+	
+	@Column(name = "created_on", nullable = false)
+	private LocalDate createdOn;
 
-	@Column(name = "approved", nullable = false)
+	@Column(name = "approved", nullable = true)
 	@ColumnDefault("false")
 	private Boolean approved;
 
 	@ManyToOne
 	@JoinColumn(name = "user_id", nullable = false,
-		foreignKey = @ForeignKey(name = "R_USER_ID_FK"))
+		foreignKey = @ForeignKey(name = "R_USER_ID_FK", foreignKeyDefinition = "FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE"))
 	private User user;
 
-	public Integer getId() {
+	public LocalDate getCreatedOn() {
+        return createdOn;
+    }
+
+    public void setCreatedOn(LocalDate createdOn) {
+        this.createdOn = createdOn;
+    }
+
+    public Integer getId() {
 		return id;
 	}
 

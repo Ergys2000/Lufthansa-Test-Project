@@ -17,6 +17,9 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 
 	@Query("select u from User u where u.type = ?1")
 	Iterable<User> findByType(String type);
+
+	@Query("select u from User u where u.supervisor.id = ?1")
+	Iterable<User> findBySupervisorId(Integer supervisorId);
 	
 	@Query("select u.supervisor from User u where u.id = ?1")
 	Optional<User> findUserSupervisor(Integer userId);

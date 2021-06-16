@@ -4,8 +4,11 @@ import {
 	Switch,
 	Route,
 } from 'react-router-dom';
+import Admin from './admin/Admin';
 import Login from './shared/Login';
-import UserPage from './shared/UserPage';
+import Supervisor from './supervisor/Supervisor';
+import User from './user/User';
+import ResetPassword from './shared/ResetPassword';
 
 type AuthContextType = {
 	authenticated: boolean;
@@ -54,11 +57,20 @@ function App() {
 	});
 	return (
 		<AuthContext.Provider value={authState}>
-			<div className="App h-screen w-screen flex justify-center items-center bg-gray-700 shadow-xl">
+			<div className="App h-screen w-screen flex justify-center items-center bg-purple-800 shadow-xl">
 				<Router>
 					<Switch>
-						<Route path="/u/:userId">
-							<UserPage />
+						<Route path="/user/:userId">
+							<User />
+						</Route>
+						<Route path="/supervisor/:userId">
+							<Supervisor />
+						</Route>
+						<Route path="/admin/:userId">
+							<Admin />
+						</Route>
+						<Route path="/reset/">
+							<ResetPassword />
 						</Route>
 						<Route path="/">
 							<Login />

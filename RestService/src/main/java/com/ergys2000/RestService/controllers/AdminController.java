@@ -29,7 +29,7 @@ public class AdminController {
 	@Autowired
 	private RequestRepository requestRepository;
 	@Autowired
-    private PasswordEncoder passwordEncoder;
+	private PasswordEncoder passwordEncoder;
 
 	@GetMapping(path = "")
 	@ResponseBody
@@ -67,11 +67,45 @@ public class AdminController {
 		return new ResponseWrapper<>("OK", savedUser, "User added!");
 	}
 
+	@PutMapping(path = "/users/{userId}")
+	@ResponseBody
+	public ResponseWrapper<Object> putUser(@PathVariable(name = "userId") Integer userId, @RequestBody User newUser) {
+		try {
+			Optional<User> u = userRepository.findById(userId);
+			if (u.isEmpty())
+				throw new Exception("The user id does not exist.");
+
+			User user = u.get();
+			user.setType(newUser.getType());
+			user.setEmail(newUser.getEmail());
+			user.setStartDate(newUser.getStartDate());
+			user.setFirstname(newUser.getFirstname());
+			user.setLastname(newUser.getLastname());
+			user.setSupervisor(newUser.getSupervisor());
+
+			if (user.getSupervisor() != null) {
+				if (user.getId().equals(user.getSupervisor().getId()))
+					throw new Exception("Sorry, the user cannot have himself as supervisor!");
+			}
+
+			userRepository.save(user);
+			return new ResponseWrapper<>("OK", user, "User updated!");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseWrapper<>("ERROR", newUser, e.getMessage());
+		}
+	}
+
 	@DeleteMapping(path = "/users/{userId}")
 	@ResponseBody
 	public ResponseWrapper<Object> deleteUser(@PathVariable(name = "userId") Integer userId) {
-		userRepository.deleteUserById(userId);
-		return new ResponseWrapper<>("OK", null, "User deleted");
+		try {
+			userRepository.deleteUserById(userId);
+			return new ResponseWrapper<>("OK", null, "User deleted");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseWrapper<>("ERROR", null, e.getMessage());
+		}
 	}
 
 	@GetMapping(path = "/requests")

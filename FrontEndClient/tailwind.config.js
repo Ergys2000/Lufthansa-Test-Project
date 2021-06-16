@@ -14,7 +14,9 @@ module.exports = {
 			display: ["group-hover"],
 			justifyContent: ["group-hover"],
 			margin: ["group-hover"],
-			borderWidth: ["last"]
+			borderWidth: ["last"],
+			cursor: ["hover"],
+			backgroundColor: ['even']
 		},
   },
   plugins: [],
