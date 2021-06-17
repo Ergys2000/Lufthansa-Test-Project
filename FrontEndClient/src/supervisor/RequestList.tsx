@@ -1,10 +1,7 @@
-import { useContext, useEffect, useState } from 'react';
-import { ContentPage, ContentPageContext, Popup, Label, Input, Select, ActionButton, Form, DangerButton } from '../styled/Components';
+import { useState, useContext } from 'react';
 import { AuthContext } from '../App';
-import { formatDate } from '../util/Utils';
 import apiLink from '../API';
-import { useRouteMatch, useParams } from 'react-router-dom';
-import { Request, User } from '../types/Common';
+import { Request  } from '../types/Common';
 
 /** 
 * Displays the user list page
@@ -23,7 +20,7 @@ const RequestList = (props: { requests: Request[] }) => {
 				<p className="font-bold flex-1 text-center">Actions</p>
 			</div>
 			{requests.map(request => (
-				<RequestItem request={request} />
+				<RequestItem key={request.id} request={request} />
 			))}
 		</div>
 	);
@@ -40,10 +37,6 @@ const RequestList = (props: { requests: Request[] }) => {
 const RequestItem = (props: { request: Request }) => {
 	const authContext = useContext(AuthContext);
 	const [request, setRequest] = useState(props.request);
-
-	/* The state which determines whether the popup window to modify a user is
-	* shown */
-	const [popupShown, setPopupShown] = useState(false);
 
 	const onIconClicked = async (value: boolean) => {
 		const bearer = "Bearer " + authContext.jwtToken;
@@ -70,8 +63,7 @@ const RequestItem = (props: { request: Request }) => {
 		circleColor = "bg-red-700";
 	}
 	return (
-		<div onClick={() => setPopupShown(true)}
-			className="flex flex-row justify-center bg-gray-100 w-full p-5 border-b border-gray-400 text-gray-700">
+		<div className="flex flex-row justify-center bg-gray-100 w-full p-5 border-b border-gray-400 text-gray-700">
 			<p className="flex-1 text-center">{`${request.user.firstname} ${request.user.lastname}`}</p>
 			<p className="flex-1 text-center">{new Date(request.createdOn).toDateString()}</p>
 			<p className="flex-1 text-center">{new Date(request.startDate).toDateString()}</p>

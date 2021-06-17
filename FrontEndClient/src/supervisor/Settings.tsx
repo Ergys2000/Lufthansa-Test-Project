@@ -178,15 +178,15 @@ const PasswordForm = () => {
 			<Form onSubmit={onSubmit}>
 				<Label>
 					<p>Old password</p>
-					<Input type="text" name="email" onChange={onChange} value={passwordForm.oldPassword}></Input>
+					<Input type="password" name="oldPassword" onChange={onChange} value={passwordForm.oldPassword}></Input>
 				</Label>
 				<Label>
 					<p>New password</p>
-					<Input type="text" name="email" onChange={onChange} value={passwordForm.newPassword}></Input>
+					<Input type="password" name="newPassword" onChange={onChange} value={passwordForm.newPassword}></Input>
 				</Label>
 				<Label>
 					<p>Confirm password</p>
-					<Input type="text" name="firstname" onChange={onChange} value={passwordForm.confirmPassword}></Input>
+					<Input type="password" name="confirmPassword" onChange={onChange} value={passwordForm.confirmPassword}></Input>
 				</Label>
 				<ActionButton className="p-3 mt-3 w-40">Update</ActionButton>
 			</Form>

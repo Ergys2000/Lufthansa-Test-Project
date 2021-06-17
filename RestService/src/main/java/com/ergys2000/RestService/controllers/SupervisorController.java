@@ -8,6 +8,7 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.ergys2000.RestService.models.ChangePasswordRequest;
 import com.ergys2000.RestService.models.Request;
 import com.ergys2000.RestService.models.User;
 import com.ergys2000.RestService.services.UserService;
@@ -108,6 +109,18 @@ public class SupervisorController {
 					"Request updated!");
 		} catch (Exception e) {
 			return new ResponseWrapper<Request>("ERROR", null, e.getMessage());
+		}
+	}
+
+	@PutMapping(path = "/{id}/changepassword")
+	@ResponseBody
+	public ResponseWrapper<User> changePassword(@PathVariable(name = "id") Integer userId,
+			@RequestBody ChangePasswordRequest changePasswordReq) {
+		try {
+			userService.changePassword(userId, changePasswordReq);
+			return new ResponseWrapper<>("OK", null, "User password updated!");
+		} catch (Exception e) {
+			return new ResponseWrapper<>("ERROR", null, e.getMessage());
 		}
 	}
 }

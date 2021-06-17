@@ -38,11 +38,11 @@ public class RequestExcelExporter {
         style.setFont(font);
          
         createCell(row, 0, "Request ID", style);      
-        createCell(row, 1, "Created at", style);       
-        createCell(row, 2, "Start date", style);    
-        createCell(row, 3, "End date", style);
-        createCell(row, 4, "User name", style);
-         
+        createCell(row, 1, "User name", style);
+        createCell(row, 2, "Created at", style);       
+        createCell(row, 3, "Start date", style);    
+        createCell(row, 4, "End date", style);
+        createCell(row, 5, "Approved", style);
     }
      
     private void createCell(Row row, int columnCount, Object value, CellStyle style) {
@@ -72,10 +72,11 @@ public class RequestExcelExporter {
 			String username = String.format("%s %s", request.getUser().getFirstname(), request.getUser().getLastname());
              
             createCell(row, columnCount++, request.getId(), style);
+            createCell(row, columnCount++, username, style);
             createCell(row, columnCount++, request.getCreatedOn().toString(), style);
             createCell(row, columnCount++, request.getStartDate().toString(), style);
             createCell(row, columnCount++, request.getEndDate().toString(), style);
-            createCell(row, columnCount++, username, style);
+            createCell(row, columnCount++, request.getApproved(), style);
         }
     }
      

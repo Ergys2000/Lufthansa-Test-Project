@@ -1,21 +1,15 @@
 package com.ergys2000.RestService.controllers;
 
-import java.util.ArrayList;
-
-import javax.security.auth.message.AuthException;
-
 import com.ergys2000.RestService.models.AuthenticationRequest;
 import com.ergys2000.RestService.models.AuthenticationResponse;
 import com.ergys2000.RestService.models.User;
-import com.ergys2000.RestService.repositories.UserRepository;
 import com.ergys2000.RestService.services.MyUserDetailsService;
 import com.ergys2000.RestService.util.JwtUtil;
 import com.ergys2000.RestService.util.ResponseWrapper;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 @RestController
 @RequestMapping(path = "/authenticate")
@@ -56,7 +48,8 @@ public class AuthenticationController {
 					"Token generated!");
 		} catch (Exception e) {
 			logger.debug("Authentication failed for {}", authRequest.getUsername());
-			return new ResponseWrapper<>("ERROR", null, "Wrong credentials!");
+			e.printStackTrace();
+			return new ResponseWrapper<>("ERROR", null, e.getMessage());
 		}
 	}
 }

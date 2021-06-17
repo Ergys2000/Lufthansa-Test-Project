@@ -1,5 +1,6 @@
 package com.ergys2000.RestService.controllers;
 
+import com.ergys2000.RestService.models.ChangePasswordRequest;
 import com.ergys2000.RestService.models.Request;
 import com.ergys2000.RestService.models.User;
 import com.ergys2000.RestService.services.UserService;
@@ -87,5 +88,17 @@ public class AdminController {
 	@ResponseBody
 	public ResponseWrapper<Iterable<Request>> getAllRequests() {
 		return new ResponseWrapper<Iterable<Request>>("OK", userService.findAllRequests(), "");
+	}
+
+	@PutMapping(path = "/changepassword")
+	@ResponseBody
+	public ResponseWrapper<User> changePassword(@PathVariable(name = "adminId") Integer userId,
+			@RequestBody ChangePasswordRequest changePasswordReq) {
+		try {
+			userService.changePassword(userId, changePasswordReq);
+			return new ResponseWrapper<>("OK", null, "User password updated!");
+		} catch (Exception e) {
+			return new ResponseWrapper<>("ERROR", null, e.getMessage());
+		}
 	}
 }

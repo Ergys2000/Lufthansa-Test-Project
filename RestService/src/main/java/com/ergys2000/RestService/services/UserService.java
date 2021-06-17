@@ -10,6 +10,7 @@ import com.ergys2000.RestService.repositories.RequestRepository;
 import com.ergys2000.RestService.repositories.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,13 @@ public class UserService {
 		Optional<User> user = userRepository.findById(userId);
 		if (user.isEmpty())
 			throw new Exception("User id does not exist!");
+		return user.get();
+	}
+
+	public User findUserByEmail(String email) throws UsernameNotFoundException {
+		Optional<User> user = userRepository.findByEmail(email);
+		if (user.isEmpty())
+			throw new UsernameNotFoundException("User id does not exist!");
 		return user.get();
 	}
 
