@@ -146,10 +146,31 @@ const UserRequestList = (props: any) => {
 			}).catch(err => console.log(err));
 	}, [authContext.userId, user.id]);
 
+	const exportToExcel = async (event: React.MouseEvent) => {
+		event.preventDefault();
+		let filename: any = `${user.firstname}-${user.lastname}_${new Date(Date.now()).toISOString()}.xlxs`;
+
+		await fetch(`${apiLink}/supervisor/${authContext.userId}/users/${user.id}/requests/export`, {
+			headers: {
+				'Authorization': `Bearer ${authContext.jwtToken}`
+			}
+		})
+			.then(res => res.blob())
+			.then(res => {
+				let url = window.URL.createObjectURL(res);
+				let a = document.createElement('a');
+				a.href = url;
+				a.download = filename;
+				document.body.appendChild(a);
+				a.click();
+				a.remove();
+			}).catch(err => console.log(err));
+	}
+
 
 	return (
 		<div className="flex flex-col">
-			<ActionButton background="green" className="p-1 mx-10 my-5 w-24 flex flex-row justify-center items-center">
+			<ActionButton onClick={exportToExcel} background="green" className="p-1 mx-10 my-5 w-24 flex flex-row justify-center items-center">
 				<p>Export</p>
 				<i className="material-icons">description</i>
 			</ActionButton>

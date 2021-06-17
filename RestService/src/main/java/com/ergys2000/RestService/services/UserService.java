@@ -3,12 +3,14 @@ package com.ergys2000.RestService.services;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import com.ergys2000.RestService.models.ChangePasswordRequest;
 import com.ergys2000.RestService.models.Request;
 import com.ergys2000.RestService.models.User;
 import com.ergys2000.RestService.repositories.RequestRepository;
 import com.ergys2000.RestService.repositories.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,9 +21,14 @@ public class UserService {
 	private RequestRepository requestRepository;
 	@Autowired
 	private EmailService emailService;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
-	public Optional<User> findById(Integer userId) {
-		return userRepository.findById(userId);
+	public User findUserById(Integer userId) throws Exception {
+		Optional<User> user = userRepository.findById(userId);
+		if (user.isEmpty())
+			throw new Exception("User id does not exist!");
+		return user.get();
 	}
 
 	public User insertUser(User user) throws Exception {
@@ -37,29 +44,43 @@ public class UserService {
 		/* Check if user of type supervisor or admin has a supervisor */
 		if (user.getType().equals("admin") || user.getType().equals("supervisor")) {
 			if (user.getSupervisor() != null)
-				throw new Exception("Every user must have a supervisor!");
+				throw new Exception("Admin or supervisor cannot have a supervisor!");
 		}
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 
 		return userRepository.save(user);
 	}
 
-	public User updateUser(User user) throws Exception {
+	public User updateUser(User newUser) throws Exception {
+		Optional<User> user = userRepository.findById(newUser.getId());
+		/* Check if the user exists */
+		if (user.isEmpty())
+			throw new Exception("User does not exist!");
+
 		/* Check if the types are acceptable */
-		if (!user.getType().equals("user") && !user.getType().equals("admin") && !user.getType().equals("supervisor"))
+		if (!newUser.getType().equals("user") && !newUser.getType().equals("admin")
+				&& !newUser.getType().equals("supervisor"))
 			throw new Exception("Sorry, user type not supported!");
 
 		/* Check if user of type normal user has a supervisor */
-		if (user.getType().equals("user") && user.getSupervisor() == null) {
+		if (newUser.getType().equals("user") && newUser.getSupervisor() == null) {
 			throw new Exception("Every user must have a supervisor!");
 		}
 
 		/* Check if user of type supervisor or admin has a supervisor */
-		if (user.getType().equals("admin") || user.getType().equals("supervisor")) {
-			if (user.getSupervisor() != null)
-				throw new Exception("Every user must have a supervisor!");
+		if (newUser.getType().equals("admin") || newUser.getType().equals("supervisor")) {
+			if (newUser.getSupervisor() != null)
+				throw new Exception("Admin or supervisor cannot have a supervisor!");
 		}
 
-		return userRepository.save(user);
+		user.get().setType(newUser.getType());
+		user.get().setFirstname(newUser.getFirstname());
+		user.get().setLastname(newUser.getLastname());
+		user.get().setEmail(newUser.getEmail());
+		user.get().setStartDate(newUser.getStartDate());
+		user.get().setSupervisor(newUser.getSupervisor());
+
+		return userRepository.save(user.get());
 	}
 
 	public void deleteUser(User user) throws Exception {
@@ -75,12 +96,28 @@ public class UserService {
 		userRepository.delete(user);
 	}
 
+	public void deleteUserById(Integer userId) throws Exception {
+		User user = findUserById(userId);
+		deleteUser(user);
+	}
+
 	public Iterable<User> findAllUsers() {
 		return userRepository.findAll();
 	}
 
 	public Iterable<User> findUsersBySupervisorId(Integer supervisorId) {
 		return userRepository.findBySupervisorId(supervisorId);
+	}
+
+	public void changePassword(Integer userId, ChangePasswordRequest chPassReq) throws Exception {
+		User user = findUserById(userId);
+		if (!chPassReq.getNewPassword().equals(chPassReq.getConfirmPassword()))
+			throw new Exception("Sorry, new and confirm password do not match!");
+		if (!passwordEncoder.matches(chPassReq.getOldPassword(), user.getPassword()))
+			throw new Exception("Wrong old password!");
+
+		user.setPassword(passwordEncoder.encode(chPassReq.getNewPassword()));
+		userRepository.save(user);
 	}
 
 	public Request insertRequest(Request request, Integer userId) throws Exception {
@@ -106,14 +143,14 @@ public class UserService {
 		return requestRepository.save(request);
 	}
 
-	public Request resolveRequest(Integer requestId, Boolean approved) throws Exception {
+	public Request resolveRequest(Integer requestId, Integer userId, Boolean approved) throws Exception {
 		Optional<Request> request = requestRepository.findById(requestId);
 		/* Perform sanity chekcs */
 		if (request.isEmpty()) {
 			throw new Exception("Your request could not be found!");
 		}
-		if (request.get().getStartDate().isAfter(request.get().getEndDate()))
-			throw new Exception("Sorry, start date cannot be after end date!");
+		if (request.get().getUser().getSupervisor().getId() != userId)
+			throw new Exception("You do not have permission to modify this request!");
 
 		request.get().setApproved(approved);
 
@@ -132,6 +169,10 @@ public class UserService {
 
 	public Iterable<Request> findRequestsByUserId(Integer userId) {
 		return requestRepository.findByUserId(userId);
+	}
+
+	public Iterable<Request> findAllRequests() {
+		return requestRepository.findAll();
 	}
 
 	private void sentEmailToSupervisor(Optional<User> user, Optional<User> supervisor) {
@@ -154,5 +195,4 @@ public class UserService {
 		}
 		emailService.sendSimpleMessage(userEmail, subject, text);
 	}
-
 }
