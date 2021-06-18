@@ -2,6 +2,7 @@ import { useState, useContext } from 'react';
 import { AuthContext } from '../App';
 import apiLink from '../API';
 import { Request  } from '../types/Common';
+import { Table, TableHeaderRow, TableRow, TableRowData } from '../styled/Table';
 
 /** 
 * Displays the user list page
@@ -10,19 +11,19 @@ import { Request  } from '../types/Common';
 const RequestList = (props: { requests: Request[] }) => {
 	const { requests } = props;
 	return (
-		<div className="mx-10 border-l-2 border-r-2 border-b-2 border-gray-800 shadow-sm">
-			<div className="bg-gray-800 flex flex-row justify-center w-full text-gray-300 p-2">
-				<p className="font-bold flex-1 text-center">User</p>
-				<p className="font-bold flex-1 text-center">Created on</p>
-				<p className="font-bold flex-1 text-center">Start date</p>
-				<p className="font-bold flex-1 text-center">End date</p>
-				<p className="font-bold flex-1 text-center">Status</p>
-				<p className="font-bold flex-1 text-center">Actions</p>
-			</div>
+		<Table>
+			<TableHeaderRow>
+				<TableRowData>User</TableRowData>
+				<TableRowData>Created on</TableRowData>
+				<TableRowData>Start date</TableRowData>
+				<TableRowData>End date</TableRowData>
+				<TableRowData>Status</TableRowData>
+				<TableRowData>Actions</TableRowData>
+			</TableHeaderRow>
 			{requests.map(request => (
 				<RequestItem key={request.id} request={request} />
 			))}
-		</div>
+		</Table>
 	);
 }
 
@@ -63,15 +64,15 @@ const RequestItem = (props: { request: Request }) => {
 		circleColor = "bg-red-700";
 	}
 	return (
-		<div className="flex flex-row justify-center bg-gray-100 w-full p-5 border-b border-gray-400 text-gray-700">
-			<p className="flex-1 text-center">{`${request.user.firstname} ${request.user.lastname}`}</p>
-			<p className="flex-1 text-center">{new Date(request.createdOn).toDateString()}</p>
-			<p className="flex-1 text-center">{new Date(request.startDate).toDateString()}</p>
-			<p className="flex-1 text-center">{new Date(request.endDate).toDateString()}</p>
-			<div className="flex-1 flex justify-center items-center">
+		<TableRow>
+			<TableRowData>{`${request.user.firstname} ${request.user.lastname}`}</TableRowData>
+			<TableRowData>{new Date(request.createdOn).toDateString()}</TableRowData>
+			<TableRowData>{new Date(request.startDate).toDateString()}</TableRowData>
+			<TableRowData>{new Date(request.endDate).toDateString()}</TableRowData>
+			<TableRowData className="flex flex-row justify-center items-center">
 				<div className={`w-6 h-6 rounded-full ${circleColor} mr-3`}></div>
-			</div>
-			<div className="flex-1 flex flex-row justify-around text-center">
+			</TableRowData>
+			<TableRowData className="flex flex-row justify-around items-center">
 				<button className="focus:outline-none flex justify-center 
 					items-center bg-transparent text-green-700 hover:bg-gray-300 rounded-full p-1">
 					<i onClick={() => onIconClicked(true)} className="material-icons hover:text-green-700 hover:cursor-pointer">done</i>
@@ -80,8 +81,8 @@ const RequestItem = (props: { request: Request }) => {
 					items-center bg-transparent text-red-700 hover:bg-gray-300 rounded-full p-1">
 					<i onClick={() => onIconClicked(false)} className="material-icons hover:text-red-700 hover:cursor-pointer">cancel</i>
 				</button>
-			</div>
-		</div>
+			</TableRowData>
+		</TableRow>
 	);
 }
 

@@ -5,6 +5,7 @@ import { formatDate } from '../util/Utils';
 import apiLink from '../API';
 import { useRouteMatch, useParams } from 'react-router-dom';
 import { User } from '../types/Common';
+import { Table, TableHeaderRow, TableRow, TableRowData } from '../styled/Table';
 
 /** 
 * Displays the user list page
@@ -64,19 +65,19 @@ const UserList = (props: any) => {
 				supervisors={supervisors}
 				close={() => setAddUser(false)} /> : null}
 
-			<div className="mx-10 border-l-2 border-r-2 border-b-2 border-gray-800">
-				<div className="bg-gray-800 flex flex-row justify-center w-full text-gray-300 p-2">
-					<p className="font-bold flex-1 text-center">Type</p>
-					<p className="font-bold flex-1 text-center">Email</p>
-					<p className="font-bold flex-1 text-center">Firstname</p>
-					<p className="font-bold flex-1 text-center">Lastname</p>
-					<p className="font-bold flex-1 text-center">Supervisor</p>
-				</div>
+			<Table>
+				<TableHeaderRow>
+					<TableRowData>Type</TableRowData>
+					<TableRowData>Email</TableRowData>
+					<TableRowData>Firstname</TableRowData>
+					<TableRowData>Lastname</TableRowData>
+					<TableRowData>Supervisor</TableRowData>
+				</TableHeaderRow>
 				{users.map(user => <UserItem key={user.id}
 					update={updateList}
 					user={user}
 					supervisors={supervisors} />)}
-			</div>
+			</Table>
 		</div>
 	);
 }
@@ -98,14 +99,13 @@ const UserItem = (props: { user: User, supervisors: User[], update: () => void }
 	const [popupShown, setPopupShown] = useState(false);
 	return (
 		<>
-			<div onClick={() => setPopupShown(true)}
-				className="flex flex-row justify-center w-full hover:bg-gray-400 p-5 border-b border-gray-400">
-				<p className="flex-1 text-center">{user.type}</p>
-				<p className="flex-1 text-center">{user.email}</p>
-				<p className="flex-1 text-center">{user.firstname}</p>
-				<p className="flex-1 text-center">{user.lastname}</p>
-				<p className="flex-1 text-center">{user.supervisor?.firstname}</p>
-			</div>
+			<TableRow className="hover:bg-gray-300" onClick={() => setPopupShown(true)}>
+				<TableRowData>{user.type}</TableRowData>
+				<TableRowData>{user.email}</TableRowData>
+				<TableRowData>{user.firstname}</TableRowData>
+				<TableRowData>{user.lastname}</TableRowData>
+				<TableRowData>{user.supervisor?.firstname}</TableRowData>
+			</TableRow>
 			{popupShown ? <UserViewForm
 				user={user}
 				update={props.update}

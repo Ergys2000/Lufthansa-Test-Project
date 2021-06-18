@@ -5,6 +5,7 @@ import apiLink from '../API';
 import { Switch, Route, Link, useHistory, useRouteMatch, useParams, useLocation } from 'react-router-dom';
 import { User, Request } from '../types/Common';
 import RequestList from './RequestList';
+import { Table, TableHeaderRow, TableRow, TableRowData } from '../styled/Table';
 
 
 /** The users page */
@@ -63,16 +64,16 @@ const UserList = (props: any) => {
 
 	return (
 		<div className="flex flex-col">
-			<div className="mx-10 border-l-2 border-r-2 border-b-2 border-gray-800 bg-gray-100 text-gray-600">
-				<div className="bg-gray-800 flex flex-row justify-center w-full text-gray-300 p-2">
-					<p className="font-bold flex-1 text-center">Type</p>
-					<p className="font-bold flex-1 text-center">Email</p>
-					<p className="font-bold flex-1 text-center">Firstname</p>
-					<p className="font-bold flex-1 text-center">Lastname</p>
-					<p className="font-bold flex-1 text-center">See requests</p>
-				</div>
+			<Table>
+				<TableHeaderRow>
+					<TableRowData>Type</TableRowData>
+					<TableRowData>Email</TableRowData>
+					<TableRowData>Firstname</TableRowData>
+					<TableRowData>Lastname</TableRowData>
+					<TableRowData>See requests</TableRowData>
+				</TableHeaderRow>
 				{users.map(user => <UserItem key={user.id} user={user} />)}
-			</div>
+			</Table>
 		</div>
 	);
 }
@@ -93,18 +94,18 @@ const UserItem = (props: { user: User }) => {
 		history.push(`${url}/${user.id}`, user);
 	}
 	return (
-		<div className="flex flex-row justify-center w-full p-5 border-b border-gray-400">
-			<p className="flex-1 text-center">{user.type}</p>
-			<p className="flex-1 text-center">{user.email}</p>
-			<p className="flex-1 text-center">{user.firstname}</p>
-			<p className="flex-1 text-center">{user.lastname}</p>
-			<div className="flex-1 flex justify-center items-center">
+		<TableRow>
+			<TableRowData>{user.type}</TableRowData>
+			<TableRowData>{user.email}</TableRowData>
+			<TableRowData>{user.firstname}</TableRowData>
+			<TableRowData>{user.lastname}</TableRowData>
+			<TableRowData className="flex-1 flex justify-center items-center">
 				<button onClick={onClick} className="focus:outline-none flex justify-center 
 					items-center bg-transparent text-black hover:bg-gray-300 rounded-full p-1">
 					<i className="material-icons hover:cursor-pointer">arrow_right</i>
 				</button>
-			</div>
-		</div>
+			</TableRowData>
+		</TableRow>
 	);
 }
 

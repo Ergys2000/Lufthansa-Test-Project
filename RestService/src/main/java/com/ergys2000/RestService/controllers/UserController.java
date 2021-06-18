@@ -1,19 +1,12 @@
 package com.ergys2000.RestService.controllers;
 
-import java.time.LocalDate;
-import java.util.Optional;
-
 import com.ergys2000.RestService.models.ChangePasswordRequest;
 import com.ergys2000.RestService.models.Request;
 import com.ergys2000.RestService.models.User;
-import com.ergys2000.RestService.repositories.RequestRepository;
-import com.ergys2000.RestService.repositories.UserRepository;
-import com.ergys2000.RestService.services.EmailService;
 import com.ergys2000.RestService.services.UserService;
 import com.ergys2000.RestService.util.ResponseWrapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

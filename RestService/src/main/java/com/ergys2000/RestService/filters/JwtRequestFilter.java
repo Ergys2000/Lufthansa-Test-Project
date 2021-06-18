@@ -8,10 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ergys2000.RestService.exception.AuthException;
-import com.ergys2000.RestService.exception.SkipAuthException;
-import com.ergys2000.RestService.models.User;
 import com.ergys2000.RestService.services.MyUserDetailsService;
-import com.ergys2000.RestService.services.UserService;
 import com.ergys2000.RestService.util.JwtUtil;
 import com.ergys2000.RestService.util.ResponseWrapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,6 +26,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
@@ -54,12 +53,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			jwt = authorizationHeader.substring(7);
 			username = jwtUtil.extractUsername(jwt);
 
-			if (username == null)
-				throw new AuthException("No username was included with your token!");
-
-			if (SecurityContextHolder.getContext().getAuthentication() == null) {
-				UserDetails pretendedUserDetails = myUserDetailsService
-						.loadUserByUsername(username);
+			if (SecurityContextHolder.getContext().getAuthentication() == null && username != null) {
+				UserDetails pretendedUserDetails = myUserDetailsService.loadUserByUsername(username);
 				/*
 				 * Check if the given jwt corresponds to the user the request prenteds to be
 				 */
@@ -73,17 +68,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 				}
 			}
-			filterChain.doFilter(request, response);
-		} catch (AuthException | ExpiredJwtException e) {
-			ObjectMapper mapper = new ObjectMapper();
-			ResponseWrapper<String> resWrapper = new ResponseWrapper<String>("ERROR", null, e.getMessage());
-			response.setStatus(HttpStatus.UNAUTHORIZED.value());
-			response.getOutputStream().print(mapper.writeValueAsString(resWrapper));
-			logger.debug("Authentication with jwt token failed");
-			e.printStackTrace();
-			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		} catch (Exception e) {
-			logger.debug("The authentication is skipping...");
+			e.printStackTrace();
+			logger.error(e);
+		} finally {
 			filterChain.doFilter(request, response);
 		}
 	}
