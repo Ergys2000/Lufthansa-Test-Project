@@ -11,6 +11,7 @@ type StageData = {
 	email: string;
 	code: string;
 };
+
 const ResetPassword = (props: any) => {
 	const [stageState, setStageState] = useState<ResetPasswordState>({
 		stage: "email",

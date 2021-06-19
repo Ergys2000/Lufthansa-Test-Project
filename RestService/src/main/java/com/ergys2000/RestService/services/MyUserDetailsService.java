@@ -12,6 +12,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+/**
+ * Defines the service which creating a user details object for spring security
+ */
 @Service
 public class MyUserDetailsService implements UserDetailsService {
 	@Autowired
@@ -28,5 +31,4 @@ public class MyUserDetailsService implements UserDetailsService {
 		User user = userService.findUserByEmail(username);
 		return user;
 	}
-
 }

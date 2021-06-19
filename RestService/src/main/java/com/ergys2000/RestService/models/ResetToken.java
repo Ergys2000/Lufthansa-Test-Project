@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+/** The resetToken model which resembles the database entity */
 @Entity
 @Table(name = "reset_token")
 public class ResetToken {

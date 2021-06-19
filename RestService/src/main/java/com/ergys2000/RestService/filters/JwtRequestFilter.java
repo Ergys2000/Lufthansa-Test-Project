@@ -7,17 +7,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ergys2000.RestService.exception.AuthException;
 import com.ergys2000.RestService.services.MyUserDetailsService;
 import com.ergys2000.RestService.util.JwtUtil;
-import com.ergys2000.RestService.util.ResponseWrapper;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,10 +20,8 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
-
+/** My custom jwt filter, which parses a request and checks for a jwt token to
+* validate*/
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 	private static final Logger logger = LogManager.getLogger(JwtRequestFilter.class);
@@ -65,7 +58,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 					usernamePasswordAuthenticationToken
 							.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 					SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-
+					logger.debug("The jwt filter was passed succssfully!");
 				}
 			}
 		} catch (Exception e) {

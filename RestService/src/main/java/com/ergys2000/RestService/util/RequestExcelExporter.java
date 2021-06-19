@@ -1,8 +1,7 @@
 package com.ergys2000.RestService.util;
 
 import java.io.IOException;
-import java.util.List;
- 
+
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,6 +14,7 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  
+/** The object used to export request to an excel sheet */
 public class RequestExcelExporter {
     private XSSFWorkbook workbook;
     private XSSFSheet sheet;

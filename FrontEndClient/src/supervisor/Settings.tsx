@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { ContentPage, ContentPageContext, Popup, Label, Input, Select, ActionButton, Form, DangerButton } from '../styled/Components';
 import { AuthContext } from '../App';
-import { formatDate } from '../util/Utils';
 import apiLink from '../API';
 import { useRouteMatch, useParams, useHistory } from 'react-router-dom';
 import { User } from '../types/Common';

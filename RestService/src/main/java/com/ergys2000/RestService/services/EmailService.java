@@ -9,6 +9,9 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
 
+/**
+ * Defines the service which handles sending email requests in a seperate thread
+ */
 @Service
 public class EmailService {
 	@Autowired

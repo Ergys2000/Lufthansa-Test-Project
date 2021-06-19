@@ -1,5 +1,6 @@
 package com.ergys2000.RestService.models;
 
+/** Defines the structure of an authentication request */
 public class AuthenticationRequest {
 	private String username;
 	private String password;

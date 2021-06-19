@@ -38,7 +38,7 @@ const RequestList = (props: { requests: Request[], updateRequestList: () => void
 * */
 const RequestItem = (props: { request: Request, updateRequestList: () => void }) => {
 	const authContext = useContext(AuthContext);
-	const {request, updateRequestList} = props;
+	const { request, updateRequestList } = props;
 
 	let circleColor = "bg-gray-400";
 	if (request.approved === true) {
@@ -46,6 +46,10 @@ const RequestItem = (props: { request: Request, updateRequestList: () => void })
 	} else if (request.approved === false) {
 		circleColor = "bg-red-700";
 	}
+
+	const endDate = new Date(request.endDate);
+	const startDate = new Date(request.startDate);
+	const daysLeft = calculateDaysLeft(startDate, endDate);
 
 	const deleteRequest = () => {
 		fetch(`${apiLink}/user/${authContext.userId}/requests/${request.id}`, {
@@ -56,7 +60,7 @@ const RequestItem = (props: { request: Request, updateRequestList: () => void })
 		})
 			.then(res => res.json())
 			.then(res => {
-				if(res.status === "OK") {
+				if (res.status === "OK") {
 					alert(res.message);
 					updateRequestList();
 				} else {
@@ -64,14 +68,16 @@ const RequestItem = (props: { request: Request, updateRequestList: () => void })
 				}
 			}).catch(err => console.log(err));
 	}
+
 	return (
 		<TableRow>
 			<TableRowData>{`${request.user.firstname} ${request.user.lastname}`}</TableRowData>
 			<TableRowData>{new Date(request.createdOn).toDateString()}</TableRowData>
 			<TableRowData>{new Date(request.startDate).toDateString()}</TableRowData>
 			<TableRowData>{new Date(request.endDate).toDateString()}</TableRowData>
-			<TableRowData className="flex flex-row justify-center items-center">
+			<TableRowData className="flex flex-col justify-center items-center">
 				<div className={`w-6 h-6 rounded-full ${circleColor} mr-3`}></div>
+				{request.approved ? <p className="text-green-700">{daysLeft.toFixed(0)} days left</p> : null}
 			</TableRowData>
 			<TableRowData>
 				<i onClick={deleteRequest}
@@ -80,6 +86,18 @@ const RequestItem = (props: { request: Request, updateRequestList: () => void })
 			</TableRowData>
 		</TableRow>
 	);
+}
+
+const calculateDaysLeft = (start: Date, end: Date): number => {
+	const nowMillis = Date.now();
+	if (nowMillis >= end.getTime()) return 0;
+	if (nowMillis <= start.getTime()) {
+		const endToStartMillis = end.getTime() - start.getTime();
+		return endToStartMillis / (1000 * 60 * 60 * 24);
+	}
+
+	const endToNowMillis = end.getTime() - Date.now();
+	return endToNowMillis / (1000 * 60 * 60 * 24);
 }
 
 

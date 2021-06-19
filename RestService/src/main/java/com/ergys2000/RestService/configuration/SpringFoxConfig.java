@@ -22,17 +22,15 @@ public class SpringFoxConfig {
 				.apiInfo(apiDetails());
 	}
 
+	/**
+	 * Defines the ApiInfo configuration for the Docket object
+	 * @returns the api details object
+	 */
 	private ApiInfo apiDetails() {
-		return new ApiInfo(
-				"Lufthansa Test Project API",
-				"This is the rest service for the lufthansa test application",
-				"1.0",
-				"Free to use",
-				new springfox.documentation.service.Contact("Ergys Rrjolli",
-				"https://github.com/Ergys2000",
-				"rrjolligys@gmail.com"),
-				"API License",
-				"https://github.com/Ergys2000",
-				Collections.emptyList());
+		return new ApiInfo("Lufthansa Test Project API", "This is the rest service for the lufthansa test application",
+				"1.0", "Free to use",
+				new springfox.documentation.service.Contact("Ergys Rrjolli", "https://github.com/Ergys2000",
+						"rrjolligys@gmail.com"),
+				"API License", "https://github.com/Ergys2000", Collections.emptyList());
 	}
 }

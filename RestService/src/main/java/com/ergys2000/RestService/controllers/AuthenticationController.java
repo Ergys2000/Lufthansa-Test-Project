@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(path = "/authenticate")
 public class AuthenticationController {
+
 	private static final Logger logger = LogManager.getLogger(AuthenticationController.class);
+
 	@Autowired
 	private JwtUtil jwtUtil;
 
@@ -44,6 +46,7 @@ public class AuthenticationController {
 			final String jwt = jwtUtil.generateToken(userDetails);
 			final User user = userDetailsService.getUserByUsername(authRequest.getUsername());
 
+			logger.debug("{} authenticated successfully!", authRequest.getUsername());
 			return new ResponseWrapper<>("OK", new AuthenticationResponse(user.getId(), jwt, user.getType()),
 					"Token generated!");
 		} catch (Exception e) {

@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
+/** The repository object for the reset user entity */
 public interface UserRepository extends CrudRepository<User, Integer> {
 	@Query("select u from User u where u.email = ?1")
 	Optional<User> findByEmail(String email);

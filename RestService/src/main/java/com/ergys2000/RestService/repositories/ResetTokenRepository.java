@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
+/** The repository object for the reset token entity */
 public interface ResetTokenRepository extends CrudRepository<ResetToken, Integer> {
 	@Query("delete from ResetToken r where r.user.id = ?1")
 	@Transactional

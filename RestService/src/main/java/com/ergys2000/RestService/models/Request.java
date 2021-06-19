@@ -14,6 +14,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.ColumnDefault;
 
+/** The request model which resembles the database entity */
 @Entity
 @Table(name = "request")
 public class Request {

@@ -12,6 +12,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+/** The service object used to create and validate jwt tokens */
 @Service
 public class JwtUtil {
 	private String SECRET_KEY = "secret";

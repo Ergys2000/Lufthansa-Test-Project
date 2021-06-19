@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 
+/** The user model which resembles the database entity */
 @Entity
 @Table(name = "user")
 public class User {

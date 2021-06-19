@@ -1,5 +1,6 @@
 package com.ergys2000.RestService.models;
 
+/** Defines the structure of an authentication response */
 public class AuthenticationResponse {
 	private Integer id;
 	private String jwt;

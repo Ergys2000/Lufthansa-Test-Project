@@ -1,10 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
 import { ContentPage, ContentPageContext, Popup, Label, Input, Select, ActionButton, Form, DangerButton } from '../styled/Components';
 import { AuthContext } from '../App';
-import { formatDate } from '../util/Utils';
 import apiLink from '../API';
 import { useRouteMatch, useParams } from 'react-router-dom';
-import { Request, User } from '../types/Common';
+import { Request } from '../types/Common';
 import RequestList from './RequestList';
 
 /** 
