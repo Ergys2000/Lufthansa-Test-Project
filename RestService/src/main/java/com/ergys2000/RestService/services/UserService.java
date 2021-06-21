@@ -284,6 +284,16 @@ public class UserService {
 	}
 
 	/**
+	 * finds all the requests of a superviso's users
+	 * 
+	 * @param userId the id of the user
+	 * @returns the request list
+	 */
+	public Iterable<Request> findRequestsBySupervisorId(Integer supervisorId) {
+		return requestRepository.findBySupervisorId(supervisorId);
+	}
+
+	/**
 	 * find all requests
 	 * 
 	 * @returns the request list

@@ -63,7 +63,7 @@ const PersonalInfo = () => {
 					alert(res.message);
 				}
 			}).catch(err => console.log(err));
-	}, [authContext.userId]);
+	}, []);
 
 	const onChange = (event: React.ChangeEvent) => {
 		event.preventDefault();
